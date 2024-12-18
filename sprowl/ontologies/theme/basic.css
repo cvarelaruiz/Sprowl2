@@ -1,0 +1,185 @@
+table, th, td {
+    border: 1px solid grey;
+    border-collapse: collapse;
+    text-align: left;
+    width: 800px;
+}
+
+table.content {
+    width: 800px;
+    border: 1px solid grey;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+table.title {
+    width: 100%;
+    border: 0px solid white;
+    border-collapse: collapse;
+}
+
+td.title {
+    background-color: #eda690;
+    border: 0px solid grey;
+    color: white;
+}
+
+table.header {
+    width: 750px;
+    border: 0px;
+}
+
+td.header-row {
+    color: darkgrey;
+    font-weight: bold;
+    border: 0px;
+    width: 150px;
+}
+
+td.header-content {
+    color: black;
+    font-style: italic;
+    font-weight: bold;
+    border: 0px;
+}
+
+th.class {
+    background-color: #ffc423;
+    -webkit-column-span: 2; /* Chrome, Safari, Opera */
+    column-span: 2;
+}
+
+th.instance {
+    background-color: #f475e8;
+    -webkit-column-span: 2; /* Chrome, Safari, Opera */
+    column-span: 2;
+}
+
+th.object_property {
+    background-color: #4aa1c9;
+    -webkit-column-span: 2; /* Chrome, Safari, Opera */
+    column-span: 2;
+}
+
+th.data_property {
+    background-color: #5de26e;
+    -webkit-column-span: 2; /* Chrome, Safari, Opera */
+    column-span: 2;
+}
+
+a {
+    color: darkred;
+}
+
+a.class {
+    color: #d1a01b;
+}
+
+a.instance {
+    color: #c15db8;
+}
+
+a.object_property {
+    color: #3b80a0;
+}
+
+a.data_property {
+    color: #3f934a;
+}
+
+td.header {
+    background-color: lightgrey;
+    width: 200px;
+    font: arial, serif;
+    font-style: italic;
+    vertical-align: top;
+}
+
+/* tooltip container */
+.tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black; /* if you want dots under the hoverable text */
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: white;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+
+    /* Position the tooltip text - see examples below! */
+    position: absolute;
+    z-index: 1;
+}
+
+/* Show the toolip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext{
+    visibility: visible;
+}
+
+.tooltip .tooltiptext::after{
+    content: " ";
+    position: absolute;
+    top: 50%;
+    right: 100%; /* To the left of the tooltip */
+    margin-top: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent black transparent transparent;
+}
+
+h1 {
+    font: arial serif;
+    font-size: 150%;
+}
+
+h2 {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 115%;
+    color: #777777;
+}
+
+h3 {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 190%;
+    color: #999999;
+}
+
+img {
+    display: block;
+    width: 80%;
+    height: auto;
+}
+
+/* Styles for the Table of Contents */
+
+ol {
+    list-style-type: none;
+    counter-reset: item;
+    margin: 0;
+    padding: 0;
+}
+
+ol > li {
+    display: table;
+    counter-increment: item;
+    margin-bottom: 0.6em;
+}
+
+ol > li:before {
+    content: counters(item, ".") ". ";
+    display: table-cell;
+    padding-right: 0.6em;
+}
+
+li ol > li {
+    margin: 0;
+}
+
+li ol > li:before {
+    content: counters(item, ".") " ";
+}

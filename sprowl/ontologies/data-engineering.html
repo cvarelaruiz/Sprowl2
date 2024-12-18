@@ -1,0 +1,1537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>CVR - Data Consulting Services:  Core Data Engineering Ontology</title>
+    <link rel="stylesheet" type="text/css" href="theme/basic.css">
+
+    <script src="/js/mxGraph/mxClient.js"></script>
+    <script type="text/javascript" src="/js/ontodiagram.js"></script>
+    <script type="text/javascript">
+        function main(graph_container){
+            var ontology_classes = JSON.parse('[{"name": "Configuration", "namespace": "https://cvr-dcs.com/ontologies/data-engineering", "uri": "https://cvr-dcs.com/ontologies/data-engineering#Configuration", "description": null, "superclass": "None", "external": false}, {"name": "Configuration_Database", "namespace": "https://cvr-dcs.com/ontologies/data-engineering", "uri": "https://cvr-dcs.com/ontologies/data-engineering#Configuration_Database", "description": null, "superclass": "None", "external": false}, {"name": "Configuration_Element", "namespace": "https://cvr-dcs.com/ontologies/data-engineering", "uri": "https://cvr-dcs.com/ontologies/data-engineering#Configuration_Element", "description": null, "superclass": "None", "external": false}, {"name": "Developer", "namespace": "https://cvr-dcs.com/ontologies/data-engineering", "uri": "https://cvr-dcs.com/ontologies/data-engineering#Developer", "description": null, "superclass": "http://xmlns.com/foaf/0.1/Person", "external": false}, {"name": "Parametric_Pipeline", "namespace": "https://cvr-dcs.com/ontologies/data-engineering", "uri": "https://cvr-dcs.com/ontologies/data-engineering#Parametric_Pipeline", "description": null, "superclass": "Pipeline", "external": false}, {"name": "Person", "namespace": "http://xmlns.com/foaf/0.1/Person", "uri": "http://xmlns.com/foaf/0.1/Person", "description": null, "superclass": "None", "external": true}, {"name": "Pipeline", "namespace": "https://cvr-dcs.com/ontologies/data-engineering", "uri": "https://cvr-dcs.com/ontologies/data-engineering#Pipeline", "description": null, "superclass": "None", "external": false}, {"name": "Processor", "namespace": "https://cvr-dcs.com/ontologies/data-engineering", "uri": "https://cvr-dcs.com/ontologies/data-engineering#Processor", "description": null, "superclass": "None", "external": false}, {"name": "Python_Processor", "namespace": "https://cvr-dcs.com/ontologies/data-engineering", "uri": "https://cvr-dcs.com/ontologies/data-engineering#Python_Processor", "description": null, "superclass": "Processor", "external": false}, {"name": "SQL_Processor", "namespace": "https://cvr-dcs.com/ontologies/data-engineering", "uri": "https://cvr-dcs.com/ontologies/data-engineering#SQL_Processor", "description": null, "superclass": "Processor", "external": false}, {"name": "Spark_Processor", "namespace": "https://cvr-dcs.com/ontologies/data-engineering", "uri": "https://cvr-dcs.com/ontologies/data-engineering#Spark_Processor", "description": null, "superclass": "Processor", "external": false}, {"name": "Static_Pipeline", "namespace": "https://cvr-dcs.com/ontologies/data-engineering", "uri": "https://cvr-dcs.com/ontologies/data-engineering#Static_Pipeline", "description": null, "superclass": "Pipeline", "external": false}]');
+            var ontology_properties = JSON.parse('[{"name": "Configures", "description": "None", "namespace": "https://cvr-dcs.com/ontologies/data-engineering", "uri": "https://cvr-dcs.com/ontologies/data-engineering#Configures", "type_name": "ObjectProperty", "type_uri": "http://www.w3.org/2002/07/owl#ObjectProperty", "domain_name": "Configuration", "domain_uri": "https://cvr-dcs.com/ontologies/data-engineering#Configuration", "range_name": "Pipeline", "range_uri": "https://cvr-dcs.com/ontologies/data-engineering#Pipeline"}, {"name": "isComposedOf", "description": "None", "namespace": "https://cvr-dcs.com/ontologies/data-engineering", "uri": "https://cvr-dcs.com/ontologies/data-engineering#isComposedOf", "type_name": "ObjectProperty", "type_uri": "http://www.w3.org/2002/07/owl#ObjectProperty", "domain_name": "Configuration", "domain_uri": "https://cvr-dcs.com/ontologies/data-engineering#Configuration", "range_name": "Configuration_Element", "range_uri": "https://cvr-dcs.com/ontologies/data-engineering#Configuration_Element"}, {"name": "Stores", "description": "None", "namespace": "https://cvr-dcs.com/ontologies/data-engineering", "uri": "https://cvr-dcs.com/ontologies/data-engineering#Stores", "type_name": "ObjectProperty", "type_uri": "http://www.w3.org/2002/07/owl#ObjectProperty", "domain_name": "Configuration_Database", "domain_uri": "https://cvr-dcs.com/ontologies/data-engineering#Configuration_Database", "range_name": "Configuration", "range_uri": "https://cvr-dcs.com/ontologies/data-engineering#Configuration"}, {"name": "isConfiguredBy", "description": "None", "namespace": "https://cvr-dcs.com/ontologies/data-engineering", "uri": "https://cvr-dcs.com/ontologies/data-engineering#isConfiguredBy", "type_name": "ObjectProperty", "type_uri": "http://www.w3.org/2002/07/owl#ObjectProperty", "domain_name": "Pipeline", "domain_uri": "https://cvr-dcs.com/ontologies/data-engineering#Pipeline", "range_name": "Configuration", "range_uri": "https://cvr-dcs.com/ontologies/data-engineering#Configuration"}, {"name": "isDevelopedBy", "description": "None", "namespace": "https://cvr-dcs.com/ontologies/data-engineering", "uri": "https://cvr-dcs.com/ontologies/data-engineering#isDevelopedBy", "type_name": "ObjectProperty", "type_uri": "http://www.w3.org/2002/07/owl#ObjectProperty", "domain_name": "Pipeline", "domain_uri": "https://cvr-dcs.com/ontologies/data-engineering#Pipeline", "range_name": "Developer", "range_uri": "https://cvr-dcs.com/ontologies/data-engineering#Developer"}, {"name": "runsOn", "description": "None", "namespace": "https://cvr-dcs.com/ontologies/data-engineering", "uri": "https://cvr-dcs.com/ontologies/data-engineering#runsOn", "type_name": "ObjectProperty", "type_uri": "http://www.w3.org/2002/07/owl#ObjectProperty", "domain_name": "Pipeline", "domain_uri": "https://cvr-dcs.com/ontologies/data-engineering#Pipeline", "range_name": "Processor", "range_uri": "https://cvr-dcs.com/ontologies/data-engineering#Processor"}]');
+            var data_properties = JSON.parse('[]');
+            var subclass_properties = JSON.parse('[{"child": "Developer", "parent": "Person"}, {"child": "Parametric_Pipeline", "parent": "Pipeline"}, {"child": "Static_Pipeline", "parent": "Pipeline"}, {"child": "Python_Processor", "parent": "Processor"}, {"child": "SQL_Processor", "parent": "Processor"}, {"child": "Spark_Processor", "parent": "Processor"}]');
+
+            g = ComposeDiagram('CVR - Data Consulting Services:  Core Data Engineering Ontology', ontology_classes, ontology_properties, data_properties, subclass_properties, graph_container, 'outlineContainer');
+            g.enableToolbar(g, 'MenuContainer', '/ontologies/img/');
+        };
+    </script>
+</head>
+
+<body onload="main(document.getElementById('graphContainer'));">
+    <!-- --------------- TITLE -------------------->
+    <table class="title">
+        <tr>
+            <td class="title"><h1 align="center">CVR - Data Consulting Services:  Core Data Engineering Ontology</h1></td>
+        </tr>
+    </table><BR>
+    Ontology to describe the core Data Engineering Terms and how they relate to each other<BR><BR>
+
+    <!-- --------------- ONTOLOGY DESCRIPTION -------------------->                                                                   
+    <table class="header">
+        <tr>
+            <td class="header-row">
+                URI
+            </td>
+            <td class="header-content">
+                <a href="https://cvr-dcs.com/ontologies/data-engineering">https://cvr-dcs.com/ontologies/data-engineering</a>
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="header-row">
+                Published By
+            </td>
+            <td class="header-content">
+                CVR Data Consulting Services Ltd.
+            </td>
+        </tr>
+        
+        
+        <tr>
+            <td class="header-row">
+                Creators
+            </td>
+            <td class="header-content">
+                
+                <a href="mailto:cristian.varela@cvr-dcs.com?subject=CVR - Data Consulting Services:  Core Data Engineering Ontology - ver: 1.0.0">cristian.varela@cvr-dcs.com</a> 
+                
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="header-row">
+                Version / Status
+            </td>
+            <td class="header-content">
+                1.0.0 /  None
+            </td>
+        </tr>
+        <tr>
+            <td class="header-row">
+                Download
+            </td>
+            <td class="header-content">
+                <a href="" download>XML/RDF</a>
+            </td>
+        </tr>
+    </table>
+
+    <!-- --------------- TOC -------------------->
+    <h1><a id="toc">Table of Contents</a></h1>
+    <ol>
+    <li><a href="#diagram"><B>Ontology Diagram</B></a></li>
+    <li><a href="#classes"><B>Classes & Instances</B></a>
+        <ol>
+            
+            <li><a href="#class_Configuration" class="class">Configuration</a>
+                <ol>
+                    
+                </ol>
+            </li>
+            
+            <li><a href="#class_Configuration_Database" class="class">Configuration_Database</a>
+                <ol>
+                    
+                </ol>
+            </li>
+            
+            <li><a href="#class_Configuration_Element" class="class">Configuration_Element</a>
+                <ol>
+                    
+                </ol>
+            </li>
+            
+            <li><a href="#class_Developer" class="class">Developer</a>
+                <ol>
+                    
+                </ol>
+            </li>
+            
+            <li><a href="#class_Parametric_Pipeline" class="class">Parametric_Pipeline</a>
+                <ol>
+                    
+                </ol>
+            </li>
+            
+            <li><a href="#class_Person" class="class">Person</a>
+                <ol>
+                    
+                    <li><a href="#instance_Cristian_Varela_Ruiz" class="instance">Cristian_Varela_Ruiz</a></li>
+                    
+                </ol>
+            </li>
+            
+            <li><a href="#class_Pipeline" class="class">Pipeline</a>
+                <ol>
+                    
+                    <li><a href="#instance_pipeline_0001" class="instance">pipeline_0001</a></li>
+                    
+                </ol>
+            </li>
+            
+            <li><a href="#class_Processor" class="class">Processor</a>
+                <ol>
+                    
+                </ol>
+            </li>
+            
+            <li><a href="#class_Python_Processor" class="class">Python_Processor</a>
+                <ol>
+                    
+                </ol>
+            </li>
+            
+            <li><a href="#class_SQL_Processor" class="class">SQL_Processor</a>
+                <ol>
+                    
+                </ol>
+            </li>
+            
+            <li><a href="#class_Spark_Processor" class="class">Spark_Processor</a>
+                <ol>
+                    
+                </ol>
+            </li>
+            
+            <li><a href="#class_Static_Pipeline" class="class">Static_Pipeline</a>
+                <ol>
+                    
+                </ol>
+            </li>
+            
+        </ol>
+    </li>
+    <li><a href="#DataProperties"><B>Data Properties</B></a>
+        <ol>
+            
+            <li><a href="#prop_mbox" class="data_property">mbox</a></li>
+            
+            <li><a href="#prop_name" class="data_property">name</a></li>
+            
+            <li><a href="#prop_nick" class="data_property">nick</a></li>
+            
+            <li><a href="#prop_short_code" class="data_property">short_code</a></li>
+            
+        </ol>
+    </li>
+    <li><a href="#Relationships"><B>Relationships</B></a>
+        <ol>
+            
+            <li><a href="#prop_Configures" class="object_property">Configures</a></li>
+            
+            <li><a href="#prop_isComposedOf" class="object_property">isComposedOf</a></li>
+            
+            <li><a href="#prop_Stores" class="object_property">Stores</a></li>
+            
+            <li><a href="#prop_isConfiguredBy" class="object_property">isConfiguredBy</a></li>
+            
+            <li><a href="#prop_isDevelopedBy" class="object_property">isDevelopedBy</a></li>
+            
+            <li><a href="#prop_runsOn" class="object_property">runsOn</a></li>
+            
+        </ol>
+    </li>
+    </ol>
+     
+    <!-- --------------- DIAGRAM -------------------->
+    <h2><a id="diagram">Ontology Diagram</a></h2>
+    <div class="container">
+        <style>
+            #MenuContainer img{
+                max-height: 40px;
+                max-width: 40px;
+            }
+        </style>
+        <div id="MenuContainer" style="z-index: -3;overflow: hidden;top: 0px;right: 0px;width: 600px;height: 45px; background: white;display: flex;"></div>
+        <div id="outlineContainer" style="z-index: 1;position: absolute;overflow: hidden;top: 0px;right: 0px;width: 160px;height: 120px;background: white;border-style: solid;border-color: lightgrey;"></div>
+        <div id="graphContainer" style="overflow: auto;width: 100%;height: 600px;" border="1"></div>
+    </div>
+    <a href="#toc">Return to Table of Content</a>
+    <!-- --------------- DOCUMENTATION -------------------->
+    <h1>Ontology Terms</h1>
+    Automatically generated documentation for the ontology terms.
+    <!-- --------------- CLASSES -------------------->
+    <h2><a id="classes">Classes & Instances</a></h2>
+    
+    <table id="class_Configuration" class="content">
+        <tr>
+            <th colspan="2" class="class">
+                
+                Configuration
+                
+            </th>
+        </tr>
+
+        
+        <tr>
+            <td class="header">
+                Description
+            </td>
+            <td>
+                None
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="header">
+                <div class="tooltip">URI<span class="tooltiptext">The Unique Resource Identifier.</span></div>
+            </td>
+            <td>
+                https://cvr-dcs.com/ontologies/data-engineering#Configuration
+            </td>
+        </tr>
+        
+        
+        
+
+        
+        <tr>
+            <td class="header">
+                <div class="tooltip">Outgoing Relationships<span class="tooltiptext">List of Relationships (Object Properties) in which the class is the domain.</span></div>
+            </td>
+            <td>
+                
+                    <a href="#prop_Configures">Configures</a>, 
+                
+                    <a href="#prop_isComposedOf">isComposedOf</a>
+                
+            </td>
+        </tr>
+        
+        
+        <tr>
+            <td class="header">
+                <div class="tooltip">Incoming Relationships<span class="tooltiptext">List of Relationships (Object Properties) in which the class is the range.</span></div>
+            </td>
+            <td>
+                
+                    <a href="#prop_Stores">Stores</a>, 
+                
+                    <a href="#prop_isConfiguredBy">isConfiguredBy</a>
+                
+            </td>
+        </tr>
+        
+    </table>
+    <a href="#toc">Return to Table of Content</a><BR>
+
+    <!-- --------------- INSTANCES -------------------->
+    
+    
+    <BR>
+    
+    <table id="class_Configuration_Database" class="content">
+        <tr>
+            <th colspan="2" class="class">
+                
+                Configuration_Database
+                
+            </th>
+        </tr>
+
+        
+        <tr>
+            <td class="header">
+                Description
+            </td>
+            <td>
+                None
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="header">
+                <div class="tooltip">URI<span class="tooltiptext">The Unique Resource Identifier.</span></div>
+            </td>
+            <td>
+                https://cvr-dcs.com/ontologies/data-engineering#Configuration_Database
+            </td>
+        </tr>
+        
+        
+        
+
+        
+        <tr>
+            <td class="header">
+                <div class="tooltip">Outgoing Relationships<span class="tooltiptext">List of Relationships (Object Properties) in which the class is the domain.</span></div>
+            </td>
+            <td>
+                
+                    <a href="#prop_Stores">Stores</a>
+                
+            </td>
+        </tr>
+        
+        
+    </table>
+    <a href="#toc">Return to Table of Content</a><BR>
+
+    <!-- --------------- INSTANCES -------------------->
+    
+    
+    <BR>
+    
+    <table id="class_Configuration_Element" class="content">
+        <tr>
+            <th colspan="2" class="class">
+                
+                Configuration_Element
+                
+            </th>
+        </tr>
+
+        
+        <tr>
+            <td class="header">
+                Description
+            </td>
+            <td>
+                None
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="header">
+                <div class="tooltip">URI<span class="tooltiptext">The Unique Resource Identifier.</span></div>
+            </td>
+            <td>
+                https://cvr-dcs.com/ontologies/data-engineering#Configuration_Element
+            </td>
+        </tr>
+        
+        
+        
+
+        
+        
+        <tr>
+            <td class="header">
+                <div class="tooltip">Incoming Relationships<span class="tooltiptext">List of Relationships (Object Properties) in which the class is the range.</span></div>
+            </td>
+            <td>
+                
+                    <a href="#prop_isComposedOf">isComposedOf</a>
+                
+            </td>
+        </tr>
+        
+    </table>
+    <a href="#toc">Return to Table of Content</a><BR>
+
+    <!-- --------------- INSTANCES -------------------->
+    
+    
+    <BR>
+    
+    <table id="class_Developer" class="content">
+        <tr>
+            <th colspan="2" class="class">
+                
+                Developer
+                
+            </th>
+        </tr>
+
+        
+        <tr>
+            <td class="header">
+                Description
+            </td>
+            <td>
+                None
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="header">
+                <div class="tooltip">URI<span class="tooltiptext">The Unique Resource Identifier.</span></div>
+            </td>
+            <td>
+                https://cvr-dcs.com/ontologies/data-engineering#Developer
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="header">
+                <div class="tooltip">SuperClass<span class="tooltiptext">The Parent class.</span></div>
+            </td>
+            <td>
+                <a href="#class_http://xmlns.com/foaf/0.1/Person">http://xmlns.com/foaf/0.1/Person</a>
+            </td>
+        </tr>
+        
+        
+        
+
+        
+        
+        <tr>
+            <td class="header">
+                <div class="tooltip">Incoming Relationships<span class="tooltiptext">List of Relationships (Object Properties) in which the class is the range.</span></div>
+            </td>
+            <td>
+                
+                    <a href="#prop_isDevelopedBy">isDevelopedBy</a>
+                
+            </td>
+        </tr>
+        
+    </table>
+    <a href="#toc">Return to Table of Content</a><BR>
+
+    <!-- --------------- INSTANCES -------------------->
+    
+    
+    <BR>
+    
+    <table id="class_Parametric_Pipeline" class="content">
+        <tr>
+            <th colspan="2" class="class">
+                
+                Parametric_Pipeline
+                
+            </th>
+        </tr>
+
+        
+        <tr>
+            <td class="header">
+                Description
+            </td>
+            <td>
+                None
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="header">
+                <div class="tooltip">URI<span class="tooltiptext">The Unique Resource Identifier.</span></div>
+            </td>
+            <td>
+                https://cvr-dcs.com/ontologies/data-engineering#Parametric_Pipeline
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="header">
+                <div class="tooltip">SuperClass<span class="tooltiptext">The Parent class.</span></div>
+            </td>
+            <td>
+                <a href="#class_Pipeline">Pipeline</a>
+            </td>
+        </tr>
+        
+        
+        
+
+        
+        
+    </table>
+    <a href="#toc">Return to Table of Content</a><BR>
+
+    <!-- --------------- INSTANCES -------------------->
+    
+    
+    <BR>
+    
+    <table id="class_Person" class="content">
+        <tr>
+            <th colspan="2" class="class">
+                
+                <a class="th" href="http://xmlns.com/foaf/0.1/Person" target="_blank">Person</a> (External)
+                
+            </th>
+        </tr>
+
+        
+        <tr>
+            <td class="header">
+                Description
+            </td>
+            <td>
+                None
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="header">
+                <div class="tooltip">URI<span class="tooltiptext">The Unique Resource Identifier.</span></div>
+            </td>
+            <td>
+                http://xmlns.com/foaf/0.1/Person
+            </td>
+        </tr>
+        
+        
+        
+        <tr>
+            <td class="header">
+                <div class="tooltip">Data Properties<span class="tooltiptext">List of Data Properties of the Class.</span></div>
+            </td>
+            <td>
+                
+                    <a href="#prop_mbox">mbox</a>, 
+                
+                    <a href="#prop_name">name</a>, 
+                
+                    <a href="#prop_nick">nick</a>
+                
+            </td>
+        </tr>
+        
+
+        
+        
+    </table>
+    <a href="#toc">Return to Table of Content</a><BR>
+
+    <!-- --------------- INSTANCES -------------------->
+    
+        <div style="margin-left: 1cm;">
+            <h3> Person Instances</h3>
+            
+                <table id="instance_Cristian_Varela_Ruiz" class="content">
+                    <tr>
+                        <th colspan="2" class="instance">
+                            Cristian_Varela_Ruiz
+                        </th>
+                    </tr>
+
+                    
+                    <tr>
+                        <td class="header">
+                            <div class="tooltip">URI<span class="tooltiptext">The Unique Resource Identifier of the Instance.</span></div>
+                        </td>
+                        <td>
+                            https://cvr-dcs.com/ontologies/data-engineering#Cristian_Varela_Ruiz
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td class="header">
+                            mbox
+                        </td>
+                        <td>
+                            cvarelaruiz@gmail.com
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td class="header">
+                            name
+                        </td>
+                        <td>
+                            Cristian Varela Ruiz
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td class="header">
+                            nick
+                        </td>
+                        <td>
+                            Cris
+                        </td>
+                    </tr>
+                    
+                </table>
+                <BR> 
+
+            
+            <a href="#toc">Return to Table of Content</a><BR>
+        </div>
+    
+    
+    <BR>
+    
+    <table id="class_Pipeline" class="content">
+        <tr>
+            <th colspan="2" class="class">
+                
+                Pipeline
+                
+            </th>
+        </tr>
+
+        
+        <tr>
+            <td class="header">
+                Description
+            </td>
+            <td>
+                A pipeline is the definition of data work to be performed.
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="header">
+                <div class="tooltip">URI<span class="tooltiptext">The Unique Resource Identifier.</span></div>
+            </td>
+            <td>
+                https://cvr-dcs.com/ontologies/data-engineering#Pipeline
+            </td>
+        </tr>
+        
+        
+        
+        <tr>
+            <td class="header">
+                <div class="tooltip">Data Properties<span class="tooltiptext">List of Data Properties of the Class.</span></div>
+            </td>
+            <td>
+                
+                    <a href="#prop_short_code">short_code</a>
+                
+            </td>
+        </tr>
+        
+
+        
+        <tr>
+            <td class="header">
+                <div class="tooltip">Outgoing Relationships<span class="tooltiptext">List of Relationships (Object Properties) in which the class is the domain.</span></div>
+            </td>
+            <td>
+                
+                    <a href="#prop_isConfiguredBy">isConfiguredBy</a>, 
+                
+                    <a href="#prop_isDevelopedBy">isDevelopedBy</a>, 
+                
+                    <a href="#prop_runsOn">runsOn</a>
+                
+            </td>
+        </tr>
+        
+        
+        <tr>
+            <td class="header">
+                <div class="tooltip">Incoming Relationships<span class="tooltiptext">List of Relationships (Object Properties) in which the class is the range.</span></div>
+            </td>
+            <td>
+                
+                    <a href="#prop_Configures">Configures</a>
+                
+            </td>
+        </tr>
+        
+    </table>
+    <a href="#toc">Return to Table of Content</a><BR>
+
+    <!-- --------------- INSTANCES -------------------->
+    
+        <div style="margin-left: 1cm;">
+            <h3> Pipeline Instances</h3>
+            
+                <table id="instance_pipeline_0001" class="content">
+                    <tr>
+                        <th colspan="2" class="instance">
+                            pipeline_0001
+                        </th>
+                    </tr>
+
+                    
+                    <tr>
+                        <td class="header">
+                            Description
+                        </td>
+                        <td>
+                            Pipelines that extracts data from an Oracle database into S3
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td class="header">
+                            <div class="tooltip">URI<span class="tooltiptext">The Unique Resource Identifier of the Instance.</span></div>
+                        </td>
+                        <td>
+                            https://cvr-dcs.com/ontologies/data-engineering#pipeline_0001
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td class="header">
+                            short_code
+                        </td>
+                        <td>
+                            PIP0001
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td class="header">
+                            description
+                        </td>
+                        <td>
+                            Pipelines that extracts data from an Oracle database into S3
+                        </td>
+                    </tr>
+                    
+                </table>
+                <BR> 
+
+            
+            <a href="#toc">Return to Table of Content</a><BR>
+        </div>
+    
+    
+    <BR>
+    
+    <table id="class_Processor" class="content">
+        <tr>
+            <th colspan="2" class="class">
+                
+                Processor
+                
+            </th>
+        </tr>
+
+        
+        <tr>
+            <td class="header">
+                Description
+            </td>
+            <td>
+                None
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="header">
+                <div class="tooltip">URI<span class="tooltiptext">The Unique Resource Identifier.</span></div>
+            </td>
+            <td>
+                https://cvr-dcs.com/ontologies/data-engineering#Processor
+            </td>
+        </tr>
+        
+        
+        
+
+        
+        
+        <tr>
+            <td class="header">
+                <div class="tooltip">Incoming Relationships<span class="tooltiptext">List of Relationships (Object Properties) in which the class is the range.</span></div>
+            </td>
+            <td>
+                
+                    <a href="#prop_runsOn">runsOn</a>
+                
+            </td>
+        </tr>
+        
+    </table>
+    <a href="#toc">Return to Table of Content</a><BR>
+
+    <!-- --------------- INSTANCES -------------------->
+    
+    
+    <BR>
+    
+    <table id="class_Python_Processor" class="content">
+        <tr>
+            <th colspan="2" class="class">
+                
+                Python_Processor
+                
+            </th>
+        </tr>
+
+        
+        <tr>
+            <td class="header">
+                Description
+            </td>
+            <td>
+                None
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="header">
+                <div class="tooltip">URI<span class="tooltiptext">The Unique Resource Identifier.</span></div>
+            </td>
+            <td>
+                https://cvr-dcs.com/ontologies/data-engineering#Python_Processor
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="header">
+                <div class="tooltip">SuperClass<span class="tooltiptext">The Parent class.</span></div>
+            </td>
+            <td>
+                <a href="#class_Processor">Processor</a>
+            </td>
+        </tr>
+        
+        
+        
+
+        
+        
+    </table>
+    <a href="#toc">Return to Table of Content</a><BR>
+
+    <!-- --------------- INSTANCES -------------------->
+    
+    
+    <BR>
+    
+    <table id="class_SQL_Processor" class="content">
+        <tr>
+            <th colspan="2" class="class">
+                
+                SQL_Processor
+                
+            </th>
+        </tr>
+
+        
+        <tr>
+            <td class="header">
+                Description
+            </td>
+            <td>
+                None
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="header">
+                <div class="tooltip">URI<span class="tooltiptext">The Unique Resource Identifier.</span></div>
+            </td>
+            <td>
+                https://cvr-dcs.com/ontologies/data-engineering#SQL_Processor
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="header">
+                <div class="tooltip">SuperClass<span class="tooltiptext">The Parent class.</span></div>
+            </td>
+            <td>
+                <a href="#class_Processor">Processor</a>
+            </td>
+        </tr>
+        
+        
+        
+
+        
+        
+    </table>
+    <a href="#toc">Return to Table of Content</a><BR>
+
+    <!-- --------------- INSTANCES -------------------->
+    
+    
+    <BR>
+    
+    <table id="class_Spark_Processor" class="content">
+        <tr>
+            <th colspan="2" class="class">
+                
+                Spark_Processor
+                
+            </th>
+        </tr>
+
+        
+        <tr>
+            <td class="header">
+                Description
+            </td>
+            <td>
+                None
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="header">
+                <div class="tooltip">URI<span class="tooltiptext">The Unique Resource Identifier.</span></div>
+            </td>
+            <td>
+                https://cvr-dcs.com/ontologies/data-engineering#Spark_Processor
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="header">
+                <div class="tooltip">SuperClass<span class="tooltiptext">The Parent class.</span></div>
+            </td>
+            <td>
+                <a href="#class_Processor">Processor</a>
+            </td>
+        </tr>
+        
+        
+        
+
+        
+        
+    </table>
+    <a href="#toc">Return to Table of Content</a><BR>
+
+    <!-- --------------- INSTANCES -------------------->
+    
+    
+    <BR>
+    
+    <table id="class_Static_Pipeline" class="content">
+        <tr>
+            <th colspan="2" class="class">
+                
+                Static_Pipeline
+                
+            </th>
+        </tr>
+
+        
+        <tr>
+            <td class="header">
+                Description
+            </td>
+            <td>
+                None
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="header">
+                <div class="tooltip">URI<span class="tooltiptext">The Unique Resource Identifier.</span></div>
+            </td>
+            <td>
+                https://cvr-dcs.com/ontologies/data-engineering#Static_Pipeline
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="header">
+                <div class="tooltip">SuperClass<span class="tooltiptext">The Parent class.</span></div>
+            </td>
+            <td>
+                <a href="#class_Pipeline">Pipeline</a>
+            </td>
+        </tr>
+        
+        
+        
+
+        
+        
+    </table>
+    <a href="#toc">Return to Table of Content</a><BR>
+
+    <!-- --------------- INSTANCES -------------------->
+    
+    
+    <BR>
+    
+    <!-- --------------- DATA PROPERTIES -------------------->
+    <h2 id="DataProperties">Data Properties (or Attributes)</h2>
+    
+        <table id="prop_mbox" class="content">
+            <tr>
+                <th colspan="2" class="data_property">
+                    mbox
+                </th>
+            </tr>
+            
+            <tr>
+                <td class="header">
+                    <div class="tooltip">URI<span class="tooltiptext"> The Unique Resource Identifier.</span></div>
+                </td>
+                <td>
+                    http://xmlns.com/foaf/0.1/mbox
+                </td>
+            </tr>
+            
+            <tr>
+                <td class="header">
+                    <div class="tooltip">Type<span class="tooltiptext">The type of the OWL property (Data or Object).</span></div>
+                </td>
+                <td>
+                    
+                        <a href="http://www.w3.org/2002/07/owl#DatatypeProperty" target="_blank">Data Attribute (DatatypeProperty)</a>
+                    
+                </td>
+            </tr>
+            
+            
+            <tr>
+                <td class="header">
+                    <div class="tooltip">Domain<span class="tooltiptext">The class to which the property belongs to.</span></div>
+                </td>
+                <td>
+                    <a href="#class_Person">Person</a>
+                </td>
+            </tr>
+            
+            
+            <tr>
+                <td class="header">
+                    <div class="tooltip">Range<span class="tooltiptext">The range of values or classes instances that the property can take.</span></div>
+                </td>
+                <td>
+                    
+                        <a href="http://www.w3.org/2001/XMLSchema#string" target="_blank">string</a>
+                    
+                </td>
+            </tr>
+            
+        </table>
+        <a href="#toc">Return to Table of Content</a><BR><BR>    
+    
+        <table id="prop_name" class="content">
+            <tr>
+                <th colspan="2" class="data_property">
+                    name
+                </th>
+            </tr>
+            
+            <tr>
+                <td class="header">
+                    <div class="tooltip">URI<span class="tooltiptext"> The Unique Resource Identifier.</span></div>
+                </td>
+                <td>
+                    http://xmlns.com/foaf/0.1/name
+                </td>
+            </tr>
+            
+            <tr>
+                <td class="header">
+                    <div class="tooltip">Type<span class="tooltiptext">The type of the OWL property (Data or Object).</span></div>
+                </td>
+                <td>
+                    
+                        <a href="http://www.w3.org/2002/07/owl#DatatypeProperty" target="_blank">Data Attribute (DatatypeProperty)</a>
+                    
+                </td>
+            </tr>
+            
+            
+            <tr>
+                <td class="header">
+                    <div class="tooltip">Domain<span class="tooltiptext">The class to which the property belongs to.</span></div>
+                </td>
+                <td>
+                    <a href="#class_Person">Person</a>
+                </td>
+            </tr>
+            
+            
+            <tr>
+                <td class="header">
+                    <div class="tooltip">Range<span class="tooltiptext">The range of values or classes instances that the property can take.</span></div>
+                </td>
+                <td>
+                    
+                        <a href="http://www.w3.org/2001/XMLSchema#string" target="_blank">string</a>
+                    
+                </td>
+            </tr>
+            
+        </table>
+        <a href="#toc">Return to Table of Content</a><BR><BR>    
+    
+        <table id="prop_nick" class="content">
+            <tr>
+                <th colspan="2" class="data_property">
+                    nick
+                </th>
+            </tr>
+            
+            <tr>
+                <td class="header">
+                    <div class="tooltip">URI<span class="tooltiptext"> The Unique Resource Identifier.</span></div>
+                </td>
+                <td>
+                    http://xmlns.com/foaf/0.1/nick
+                </td>
+            </tr>
+            
+            <tr>
+                <td class="header">
+                    <div class="tooltip">Type<span class="tooltiptext">The type of the OWL property (Data or Object).</span></div>
+                </td>
+                <td>
+                    
+                        <a href="http://www.w3.org/2002/07/owl#DatatypeProperty" target="_blank">Data Attribute (DatatypeProperty)</a>
+                    
+                </td>
+            </tr>
+            
+            
+            <tr>
+                <td class="header">
+                    <div class="tooltip">Domain<span class="tooltiptext">The class to which the property belongs to.</span></div>
+                </td>
+                <td>
+                    <a href="#class_Person">Person</a>
+                </td>
+            </tr>
+            
+            
+            <tr>
+                <td class="header">
+                    <div class="tooltip">Range<span class="tooltiptext">The range of values or classes instances that the property can take.</span></div>
+                </td>
+                <td>
+                    
+                        <a href="http://www.w3.org/2001/XMLSchema#string" target="_blank">string</a>
+                    
+                </td>
+            </tr>
+            
+        </table>
+        <a href="#toc">Return to Table of Content</a><BR><BR>    
+    
+        <table id="prop_short_code" class="content">
+            <tr>
+                <th colspan="2" class="data_property">
+                    short_code
+                </th>
+            </tr>
+            
+            <tr>
+                <td class="header">
+                    Description
+                </td>
+                <td>
+                    The short code or hash of the pipeline uniquely identifying it.
+                </td>
+            </tr>
+            
+            <tr>
+                <td class="header">
+                    <div class="tooltip">URI<span class="tooltiptext"> The Unique Resource Identifier.</span></div>
+                </td>
+                <td>
+                    https://cvr-dcs.com/ontologies/data-engineering#short_code
+                </td>
+            </tr>
+            
+            <tr>
+                <td class="header">
+                    <div class="tooltip">Type<span class="tooltiptext">The type of the OWL property (Data or Object).</span></div>
+                </td>
+                <td>
+                    
+                        <a href="http://www.w3.org/2002/07/owl#DatatypeProperty" target="_blank">Data Attribute (DatatypeProperty)</a>
+                    
+                </td>
+            </tr>
+            
+            
+            <tr>
+                <td class="header">
+                    <div class="tooltip">Domain<span class="tooltiptext">The class to which the property belongs to.</span></div>
+                </td>
+                <td>
+                    <a href="#class_Pipeline">Pipeline</a>
+                </td>
+            </tr>
+            
+            
+            <tr>
+                <td class="header">
+                    <div class="tooltip">Range<span class="tooltiptext">The range of values or classes instances that the property can take.</span></div>
+                </td>
+                <td>
+                    
+                        <a href="http://www.w3.org/2001/XMLSchema#string" target="_blank">string</a>
+                    
+                </td>
+            </tr>
+            
+        </table>
+        <a href="#toc">Return to Table of Content</a><BR><BR>    
+    
+    <!-- --------------- RELATIONSHIPS -------------------->
+     <h2 id="Relationships">Relationships</h2>
+     
+     <table id="prop_Configures" class="content">
+        <tr>
+            <th colspan="2" class="object_property">
+                Configures
+            </th>
+        </tr>
+
+        
+        <tr>
+            <td class="header">
+                <div class="tooltip">URI<span class="tooltiptext"> The Unique Resource Identifier.</span></div>
+            </td>
+            <td>
+                https://cvr-dcs.com/ontologies/data-engineering#Configures
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="header">
+                <div class="tooltip">Type<span class="tooltiptext">The type of the OWL property (Data or Object).</span></div>
+            </td>
+            <td>
+                
+                    <a href="http://www.w3.org/2002/07/owl#ObjectProperty" target="_blank">Relationships (ObjectProperty)</a>
+                
+            </td>
+        </tr>
+        
+        
+        <tr>
+            <td class="header">
+                <div class="tooltip">Domain<span class="tooltiptext">The class to which the property belongs to.</span></div>
+            </td>
+            <td>
+                <a href="#class_Configuration">Configuration</a>
+            </td>
+        </tr>
+        
+        
+        <tr>
+            <td class="header">
+                <div class="tooltip">Range<span class="tooltiptext">The range of values or classes instances that the property can take.</span></div>
+            </td>
+            <td>
+                
+                    <a href="Pipeline" target="_blank">Pipeline</a>
+                
+            </td>
+        </tr>
+        
+     </table>
+     <a href="#toc">Return to Table of Content</a><BR><BR> 
+     
+     <table id="prop_isComposedOf" class="content">
+        <tr>
+            <th colspan="2" class="object_property">
+                isComposedOf
+            </th>
+        </tr>
+
+        
+        <tr>
+            <td class="header">
+                <div class="tooltip">URI<span class="tooltiptext"> The Unique Resource Identifier.</span></div>
+            </td>
+            <td>
+                https://cvr-dcs.com/ontologies/data-engineering#isComposedOf
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="header">
+                <div class="tooltip">Type<span class="tooltiptext">The type of the OWL property (Data or Object).</span></div>
+            </td>
+            <td>
+                
+                    <a href="http://www.w3.org/2002/07/owl#ObjectProperty" target="_blank">Relationships (ObjectProperty)</a>
+                
+            </td>
+        </tr>
+        
+        
+        <tr>
+            <td class="header">
+                <div class="tooltip">Domain<span class="tooltiptext">The class to which the property belongs to.</span></div>
+            </td>
+            <td>
+                <a href="#class_Configuration">Configuration</a>
+            </td>
+        </tr>
+        
+        
+        <tr>
+            <td class="header">
+                <div class="tooltip">Range<span class="tooltiptext">The range of values or classes instances that the property can take.</span></div>
+            </td>
+            <td>
+                
+                    <a href="Configuration_Element" target="_blank">Configuration_Element</a>
+                
+            </td>
+        </tr>
+        
+     </table>
+     <a href="#toc">Return to Table of Content</a><BR><BR> 
+     
+     <table id="prop_Stores" class="content">
+        <tr>
+            <th colspan="2" class="object_property">
+                Stores
+            </th>
+        </tr>
+
+        
+        <tr>
+            <td class="header">
+                <div class="tooltip">URI<span class="tooltiptext"> The Unique Resource Identifier.</span></div>
+            </td>
+            <td>
+                https://cvr-dcs.com/ontologies/data-engineering#Stores
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="header">
+                <div class="tooltip">Type<span class="tooltiptext">The type of the OWL property (Data or Object).</span></div>
+            </td>
+            <td>
+                
+                    <a href="http://www.w3.org/2002/07/owl#ObjectProperty" target="_blank">Relationships (ObjectProperty)</a>
+                
+            </td>
+        </tr>
+        
+        
+        <tr>
+            <td class="header">
+                <div class="tooltip">Domain<span class="tooltiptext">The class to which the property belongs to.</span></div>
+            </td>
+            <td>
+                <a href="#class_Configuration_Database">Configuration_Database</a>
+            </td>
+        </tr>
+        
+        
+        <tr>
+            <td class="header">
+                <div class="tooltip">Range<span class="tooltiptext">The range of values or classes instances that the property can take.</span></div>
+            </td>
+            <td>
+                
+                    <a href="Configuration" target="_blank">Configuration</a>
+                
+            </td>
+        </tr>
+        
+     </table>
+     <a href="#toc">Return to Table of Content</a><BR><BR> 
+     
+     <table id="prop_isConfiguredBy" class="content">
+        <tr>
+            <th colspan="2" class="object_property">
+                isConfiguredBy
+            </th>
+        </tr>
+
+        
+        <tr>
+            <td class="header">
+                <div class="tooltip">URI<span class="tooltiptext"> The Unique Resource Identifier.</span></div>
+            </td>
+            <td>
+                https://cvr-dcs.com/ontologies/data-engineering#isConfiguredBy
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="header">
+                <div class="tooltip">Type<span class="tooltiptext">The type of the OWL property (Data or Object).</span></div>
+            </td>
+            <td>
+                
+                    <a href="http://www.w3.org/2002/07/owl#ObjectProperty" target="_blank">Relationships (ObjectProperty)</a>
+                
+            </td>
+        </tr>
+        
+        
+        <tr>
+            <td class="header">
+                <div class="tooltip">Domain<span class="tooltiptext">The class to which the property belongs to.</span></div>
+            </td>
+            <td>
+                <a href="#class_Pipeline">Pipeline</a>
+            </td>
+        </tr>
+        
+        
+        <tr>
+            <td class="header">
+                <div class="tooltip">Range<span class="tooltiptext">The range of values or classes instances that the property can take.</span></div>
+            </td>
+            <td>
+                
+                    <a href="Configuration" target="_blank">Configuration</a>
+                
+            </td>
+        </tr>
+        
+     </table>
+     <a href="#toc">Return to Table of Content</a><BR><BR> 
+     
+     <table id="prop_isDevelopedBy" class="content">
+        <tr>
+            <th colspan="2" class="object_property">
+                isDevelopedBy
+            </th>
+        </tr>
+
+        
+        <tr>
+            <td class="header">
+                <div class="tooltip">URI<span class="tooltiptext"> The Unique Resource Identifier.</span></div>
+            </td>
+            <td>
+                https://cvr-dcs.com/ontologies/data-engineering#isDevelopedBy
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="header">
+                <div class="tooltip">Type<span class="tooltiptext">The type of the OWL property (Data or Object).</span></div>
+            </td>
+            <td>
+                
+                    <a href="http://www.w3.org/2002/07/owl#ObjectProperty" target="_blank">Relationships (ObjectProperty)</a>
+                
+            </td>
+        </tr>
+        
+        
+        <tr>
+            <td class="header">
+                <div class="tooltip">Domain<span class="tooltiptext">The class to which the property belongs to.</span></div>
+            </td>
+            <td>
+                <a href="#class_Pipeline">Pipeline</a>
+            </td>
+        </tr>
+        
+        
+        <tr>
+            <td class="header">
+                <div class="tooltip">Range<span class="tooltiptext">The range of values or classes instances that the property can take.</span></div>
+            </td>
+            <td>
+                
+                    <a href="Developer" target="_blank">Developer</a>
+                
+            </td>
+        </tr>
+        
+     </table>
+     <a href="#toc">Return to Table of Content</a><BR><BR> 
+     
+     <table id="prop_runsOn" class="content">
+        <tr>
+            <th colspan="2" class="object_property">
+                runsOn
+            </th>
+        </tr>
+
+        
+        <tr>
+            <td class="header">
+                <div class="tooltip">URI<span class="tooltiptext"> The Unique Resource Identifier.</span></div>
+            </td>
+            <td>
+                https://cvr-dcs.com/ontologies/data-engineering#runsOn
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="header">
+                <div class="tooltip">Type<span class="tooltiptext">The type of the OWL property (Data or Object).</span></div>
+            </td>
+            <td>
+                
+                    <a href="http://www.w3.org/2002/07/owl#ObjectProperty" target="_blank">Relationships (ObjectProperty)</a>
+                
+            </td>
+        </tr>
+        
+        
+        <tr>
+            <td class="header">
+                <div class="tooltip">Domain<span class="tooltiptext">The class to which the property belongs to.</span></div>
+            </td>
+            <td>
+                <a href="#class_Pipeline">Pipeline</a>
+            </td>
+        </tr>
+        
+        
+        <tr>
+            <td class="header">
+                <div class="tooltip">Range<span class="tooltiptext">The range of values or classes instances that the property can take.</span></div>
+            </td>
+            <td>
+                
+                    <a href="Processor" target="_blank">Processor</a>
+                
+            </td>
+        </tr>
+        
+     </table>
+     <a href="#toc">Return to Table of Content</a><BR><BR> 
+     
+     
+</body>
+</html>

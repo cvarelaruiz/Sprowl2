@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{{ ontology.title }}</title>
+    <link rel="stylesheet" type="text/css" href="theme/basic.css">
+
+    <script src="/js/mxGraph/mxClient.js"></script>
+    <script type="text/javascript" src="/js/ontodiagram.js"></script>
+    <script type="text/javascript">
+        function main(graph_container){
+            var ontology_classes = JSON.parse('{{ classes_json | safe }}');
+            var ontology_properties = JSON.parse('{{ properties_json | safe}}');
+            var data_properties = JSON.parse('{{ data_properties_json | safe}}');
+            var subclass_properties = JSON.parse('{{ subclass_properties_json | safe}}');
+
+            g = ComposeDiagram('{{ ontology.title }}', ontology_classes, ontology_properties, data_properties, subclass_properties, graph_container, 'outlineContainer');
+            g.enableToolbar(g, 'MenuContainer', '/ontologies/img/');
+        };
+    </script>
+</head>
+
+<body onload="main(document.getElementById('graphContainer'));">
+    <!-- --------------- TITLE -------------------->
+    <table class="title">
+        <tr>
+            <td class="title"><h1 align="center">{{ ontology.title }}</h1></td>
+        </tr>
+    </table><BR>
+    {{ ontology.description }}<BR><BR>
+
+    <!-- --------------- ONTOLOGY DESCRIPTION -------------------->                                                                   
+    <table class="header">
+        <tr>
+            <td class="header-row">
+                URI
+            </td>
+            <td class="header-content">
+                <a href="{{ ontology.uri }}">{{ ontology.uri }}</a>
+            </td>
+        </tr>
+        {% if ontology.publisher != "None" %}
+        <tr>
+            <td class="header-row">
+                Published By
+            </td>
+            <td class="header-content">
+                {{ ontology.publisher }}
+            </td>
+        </tr>
+        {% endif %}
+        {% if ontology.creators|count > 0 %}
+        <tr>
+            <td class="header-row">
+                Creators
+            </td>
+            <td class="header-content">
+                {% for creator in ontology.creators %}
+                <a href="mailto:{{creator}}?subject={{ontology.title}} - ver: {{ontology.versionInfo}}">{{ creator }}</a> {% if not loop.last %}, {% endif %}
+                {% endfor %}
+            </td>
+        </tr>
+        {% endif %}
+        <tr>
+            <td class="header-row">
+                Version / Status
+            </td>
+            <td class="header-content">
+                {{ontology.versionInfo}} /  {{ontology.term_status}}
+            </td>
+        </tr>
+        <tr>
+            <td class="header-row">
+                Download
+            </td>
+            <td class="header-content">
+                <a href="{{ontology.download_loation}}" download>XML/RDF</a>
+            </td>
+        </tr>
+    </table>
+
+    <!-- --------------- TOC -------------------->
+    <h1><a id="toc">Table of Contents</a></h1>
+    <ol>
+    <li><a href="#diagram"><B>Ontology Diagram</B></a></li>
+    <li><a href="#classes"><B>Classes & Instances</B></a>
+        <ol>
+            {% for class in classes %}
+            <li><a href="#class_{{ class.name }}" class="class">{{ class.name }}</a>
+                <ol>
+                    {% for instance in class.instances %}
+                    <li><a href="#instance_{{instance.name}}" class="instance">{{ instance.name}}</a></li>
+                    {% endfor %}
+                </ol>
+            </li>
+            {% endfor %}
+        </ol>
+    </li>
+    <li><a href="#DataProperties"><B>Data Properties</B></a>
+        <ol>
+            {% for property in properties|selectattr("type_name", "equalto", "DatatypeProperty")|list %}
+            <li><a href="#prop_{{ property.name }}" class="data_property">{{ property.name }}</a></li>
+            {% endfor %}
+        </ol>
+    </li>
+    <li><a href="#Relationships"><B>Relationships</B></a>
+        <ol>
+            {% for property in properties|selectattr("type_name", "equalto", "ObjectProperty")|list %}
+            <li><a href="#prop_{{ property.name }}" class="object_property">{{ property.name }}</a></li>
+            {% endfor %}
+        </ol>
+    </li>
+    </ol>
+     
+    <!-- --------------- DIAGRAM -------------------->
+    <h2><a id="diagram">Ontology Diagram</a></h2>
+    <div class="container">
+        <style>
+            #MenuContainer img{
+                max-height: 40px;
+                max-width: 40px;
+            }
+        </style>
+        <div id="MenuContainer" style="z-index: -3;overflow: hidden;top: 0px;right: 0px;width: 600px;height: 45px; background: white;display: flex;"></div>
+        <div id="outlineContainer" style="z-index: 1;position: absolute;overflow: hidden;top: 0px;right: 0px;width: 160px;height: 120px;background: white;border-style: solid;border-color: lightgrey;"></div>
+        <div id="graphContainer" style="overflow: auto;width: 100%;height: 600px;" border="1"></div>
+    </div>
+    <a href="#toc">Return to Table of Content</a>
+    <!-- --------------- DOCUMENTATION -------------------->
+    <h1>Ontology Terms</h1>
+    Automatically generated documentation for the ontology terms.
+    <!-- --------------- CLASSES -------------------->
+    <h2><a id="classes">Classes & Instances</a></h2>
+    {% for class in classes %}
+    <table id="class_{{ class.name}}" class="content">
+        <tr>
+            <th colspan="2" class="class">
+                {% if class.external %}
+                <a class="th" href="{{ class.uri}}" target="_blank">{{class.name}}</a> (External)
+                {% else %}
+                {{ class.name }}
+                {% endif %}
+            </th>
+        </tr>
+
+        {% if class.dscription != "None" %}
+        <tr>
+            <td class="header">
+                Description
+            </td>
+            <td>
+                {{ class.description }}
+            </td>
+        </tr>
+        {% endif %}
+        <tr>
+            <td class="header">
+                <div class="tooltip">URI<span class="tooltiptext">The Unique Resource Identifier.</span></div>
+            </td>
+            <td>
+                {{ class.uri }}
+            </td>
+        </tr>
+        {% if class.superclass != "None" %}
+        <tr>
+            <td class="header">
+                <div class="tooltip">SuperClass<span class="tooltiptext">The Parent class.</span></div>
+            </td>
+            <td>
+                <a href="#class_{{class.superclass}}">{{ class.superclass}}</a>
+            </td>
+        </tr>
+        {% endif %}
+        
+        {% if class.properties|selectattr("type_name", "equalto", "DatatypeProperty")|list|count >0 %}
+        <tr>
+            <td class="header">
+                <div class="tooltip">Data Properties<span class="tooltiptext">List of Data Properties of the Class.</span></div>
+            </td>
+            <td>
+                {% for property in class.properties|selectattr("type_name", "equalto", "DatatypeProperty") %}
+                    <a href="#prop_{{ property.name }}">{{ property.name }}</a>{% if not loop.last %}, {% endif %}
+                {% endfor %}
+            </td>
+        </tr>
+        {% endif %}
+
+        {% if class.properties|selectattr("type_name", "equalto", "ObjectProperty")|list|count >0 %}
+        <tr>
+            <td class="header">
+                <div class="tooltip">Outgoing Relationships<span class="tooltiptext">List of Relationships (Object Properties) in which the class is the domain.</span></div>
+            </td>
+            <td>
+                {% for property in class.properties|selectattr("type_name", "equalto", "ObjectProperty") %}
+                    <a href="#prop_{{ property.name }}">{{ property.name }}</a>{% if not loop.last %}, {% endif %}
+                {% endfor %}
+            </td>
+        </tr>
+        {% endif %}
+        {% if class.ranges_of|selectattr("type_name", "equalto", "ObjectProperty")|list|count >0 %}
+        <tr>
+            <td class="header">
+                <div class="tooltip">Incoming Relationships<span class="tooltiptext">List of Relationships (Object Properties) in which the class is the range.</span></div>
+            </td>
+            <td>
+                {% for range in class.ranges_of|selectattr("type_name", "equalto", "ObjectProperty") %}
+                    <a href="#prop_{{ range.name }}">{{ range.name }}</a>{% if not loop.last %}, {% endif %}
+                {% endfor %}
+            </td>
+        </tr>
+        {% endif %}
+    </table>
+    <a href="#toc">Return to Table of Content</a><BR>
+
+    <!-- --------------- INSTANCES -------------------->
+    {% if class.instances|count >0 %}
+        <div style="margin-left: 1cm;">
+            <h3> {{ class.name }} Instances</h3>
+            {% for instance in class.instances %}
+                <table id="instance_{{ instance.name}}" class="content">
+                    <tr>
+                        <th colspan="2" class="instance">
+                            {{ instance.name}}
+                        </th>
+                    </tr>
+
+                    {% if instance.description != "None" %}
+                    <tr>
+                        <td class="header">
+                            Description
+                        </td>
+                        <td>
+                            {{ instance.description}}
+                        </td>
+                    </tr>
+                    {% endif %}
+                    <tr>
+                        <td class="header">
+                            <div class="tooltip">URI<span class="tooltiptext">The Unique Resource Identifier of the Instance.</span></div>
+                        </td>
+                        <td>
+                            {{ instance.uri }}
+                        </td>
+                    </tr>
+                    {% for property in instance.data_properties %}
+                    <tr>
+                        <td class="header">
+                            {{ property.name }}
+                        </td>
+                        <td>
+                            {{ property.value }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+                <BR> 
+
+            {% endfor %}
+            <a href="#toc">Return to Table of Content</a><BR>
+        </div>
+    {% endif %}
+    
+    <BR>
+    {% endfor %}
+    <!-- --------------- DATA PROPERTIES -------------------->
+    <h2 id="DataProperties">Data Properties (or Attributes)</h2>
+    {% for property in properties|selectattr("type_name", "equalto", "DatatypeProperty")|list %}
+        <table id="prop_{{ property.name }}" class="content">
+            <tr>
+                <th colspan="2" class="data_property">
+                    {{property.name}}
+                </th>
+            </tr>
+            {% if property.description != "None" %}
+            <tr>
+                <td class="header">
+                    Description
+                </td>
+                <td>
+                    {{ property.description}}
+                </td>
+            </tr>
+            {% endif %}
+            <tr>
+                <td class="header">
+                    <div class="tooltip">URI<span class="tooltiptext"> The Unique Resource Identifier.</span></div>
+                </td>
+                <td>
+                    {{ property.uri}}
+                </td>
+            </tr>
+            {% if property.type_name != "None" %}
+            <tr>
+                <td class="header">
+                    <div class="tooltip">Type<span class="tooltiptext">The type of the OWL property (Data or Object).</span></div>
+                </td>
+                <td>
+                    {% if property.type_name=="DatatypeProperty" %}
+                        <a href="{{property.type_uri}}" target="_blank">Data Attribute ({{property.type_name}})</a>
+                    {% else %}
+                        <a href="{{property.type_uri}}" target="_blank">Relationships ({{property.type_name}})</a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endif %}
+            {% if property.domain != "None" %}
+            <tr>
+                <td class="header">
+                    <div class="tooltip">Domain<span class="tooltiptext">The class to which the property belongs to.</span></div>
+                </td>
+                <td>
+                    <a href="#class_{{property.domain_name}}">{{property.domain_name}}</a>
+                </td>
+            </tr>
+            {% endif %}
+            {% if property.range != "None" %}
+            <tr>
+                <td class="header">
+                    <div class="tooltip">Range<span class="tooltiptext">The range of values or classes instances that the property can take.</span></div>
+                </td>
+                <td>
+                    {% if property.type_name=="DatatypeProperty" %}
+                        <a href="{{property.range_uri}}" target="_blank">{{property.range_name}}</a>
+                    {% else %}
+                        <a href="{{property.range_name}}" target="_blank">{{property.range_name}}</a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endif %}
+        </table>
+        <a href="#toc">Return to Table of Content</a><BR><BR>    
+    {% endfor %}
+    <!-- --------------- RELATIONSHIPS -------------------->
+     <h2 id="Relationships">Relationships</h2>
+     {% for property in properties|selectattr("type_name", "equalto", "ObjectProperty")|list + ranges_of|list %}
+     <table id="prop_{{property.name}}" class="content">
+        <tr>
+            <th colspan="2" class="object_property">
+                {{property.name}}
+            </th>
+        </tr>
+
+        {% if property.description != "None" %}
+        <tr>
+            <td class="header">
+                Description
+            </td>
+            <td>
+                {{ property.description}}
+            </td>
+        </tr>
+        {% endif %}
+        <tr>
+            <td class="header">
+                <div class="tooltip">URI<span class="tooltiptext"> The Unique Resource Identifier.</span></div>
+            </td>
+            <td>
+                {{ property.uri}}
+            </td>
+        </tr>
+        {% if property.type_name != "None" %}
+        <tr>
+            <td class="header">
+                <div class="tooltip">Type<span class="tooltiptext">The type of the OWL property (Data or Object).</span></div>
+            </td>
+            <td>
+                {% if property.type_name=="DatatypeProperty" %}
+                    <a href="{{property.type_uri}}" target="_blank">Data Attribute ({{property.type_name}})</a>
+                {% else %}
+                    <a href="{{property.type_uri}}" target="_blank">Relationships ({{property.type_name}})</a>
+                {% endif %}
+            </td>
+        </tr>
+        {% endif %}
+        {% if property.domain != "None" %}
+        <tr>
+            <td class="header">
+                <div class="tooltip">Domain<span class="tooltiptext">The class to which the property belongs to.</span></div>
+            </td>
+            <td>
+                <a href="#class_{{property.domain_name}}">{{property.domain_name}}</a>
+            </td>
+        </tr>
+        {% endif %}
+        {% if property.range != "None" %}
+        <tr>
+            <td class="header">
+                <div class="tooltip">Range<span class="tooltiptext">The range of values or classes instances that the property can take.</span></div>
+            </td>
+            <td>
+                {% if property.type_name=="DatatypeProperty" %}
+                    <a href="{{property.range_uri}}" target="_blank">{{property.range_name}}</a>
+                {% else %}
+                    <a href="{{property.range_name}}" target="_blank">{{property.range_name}}</a>
+                {% endif %}
+            </td>
+        </tr>
+        {% endif %}
+     </table>
+     <a href="#toc">Return to Table of Content</a><BR><BR> 
+     {% endfor %}
+     
+</body>
+</html>

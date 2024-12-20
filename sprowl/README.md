@@ -39,6 +39,6 @@ The program will return a set of static web content files following the structur
 
 The resultant files can then be copied into a web-server for them to be served.
 
-_Note:_ It is recommended that the root directory of the web-server where the documents are located matches the base url of the ontology (ie. https://cvr-dcs.com/ont/)
+_Note:_ It is recommended that the root directory of the web-server where the documents are located matches the base url of the ontology (ie. https://cvr-dcs.com/ontologies/)
 
 Contact: [Cristian Varela](mailto:cristian@cvr-dcs.com?subject=SprOWL) - CVR Data Consulting Services Ltd.

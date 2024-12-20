@@ -1,5 +1,5 @@
 class OntologyDiagram {
-    constructor(GraphName, containerElement, outlineContainerElementID){
+    constructor(GraphName, containerElement, outlineContainerElementID) {
         this.container = containerElement;
         this.GraphName = GraphName;
         this.model = new mxGraphModel();
@@ -58,22 +58,22 @@ class OntologyDiagram {
         this.relationships = {};
     }
 
-    beginUpdate(){
+    beginUpdate() {
         this.model.beginUpdate();
     }
 
-    executeLayout(){
+    executeLayout() {
         this.model.endUpdate();
         this.layout.execute(this.graph.getDefaultParent());
     }
 
-    refreshLayout(){
+    refreshLayout() {
         this.graph.refresh();
     }
 
-    addOntologyClass(className, classURI, classDescription, superClass, external){
-        if (!(className in this.classes)){
-            if (external){
+    addOntologyClass(className, classURI, classDescription, superClass, external) {
+        if (!(className in this.classes)) {
+            if (external) {
                 var style = this.object_styles["ontology_class_external_style"];
             } else {
                 var style = this.object_styles["ontology_class_style"];
@@ -89,7 +89,7 @@ class OntologyDiagram {
         }
     };
 
-    Connect(srcName, destName, label, style){
+    Connect(srcName, destName, label, style) {
         var src = this.classes[srcName];
         var dst = this.classes[destName];
         var style = this.object_styles[style];
@@ -98,7 +98,7 @@ class OntologyDiagram {
 
         // Check if a reciprocal edge exists and offset the labels so they're readable
         var reciprocalEdges = this.graph.getModel().getEdgesBetween(dst, src, false);
-        if (reciprocalEdges.length > 0){
+        if (reciprocalEdges.length > 0) {
             var reciprocalEdge = reciprocalEdges[0];
 
             var geo_recriprocal = this.graph.getCellGeometry(reciprocalEdge);
@@ -113,74 +113,75 @@ class OntologyDiagram {
         return edge;
     };
 
-    addDataProperty(className, property){
-        var data_property = null;
-        if ((className in this.classes)){
+    addDataProperty(className, propertyName) {
+        if (className in this.classes) {
+
             var style = this.object_styles["data_property_style"];
-            data_property = this.graph.insertVertex(this.parent, null, property, 0, 0, 60, 20, style);
-            data_property.setConnectable(true);
-            data_property.setVertex(true);
-            this.graph.updateCellSize(data_property);
-            this.graph.insertEdge(this.parent, null, '', this.classes[className], data_property, this.object_styles["edge_style"]);
+            var dataPropertyVertex = this.graph.insertVertex(this.parent, null, propertyName, 0, 0, 80, 30, style);
+            dataPropertyVertex.setConnectable(true);
+            dataPropertyVertex.setVertex(true);
+            this.graph.updateCellSize(dataPropertyVertex);
+            this.graph.insertEdge(this.parent, null, '', this.classes[className], dataPropertyVertex, this.object_styles["edge_style"]);
+            return dataPropertyVertex;
         }
-        return data_property;
-    };
+        return null;
+    }
 
-    enableToolBar(gInstance, menuContainerElementID, static_path){
-        var menuElement = document.getElementById(menuContainerElementID);
-        menuElement.style.padding = '4px';
+    // enableToolbar(menuContainerElementID, static_path) {
+    //     var menuElement = document.getElementById(menuContainerElementID);
+    //     menuElement.style.padding = '4px';
 
-        var tb = new mxToolbar(menuElement);
-        tb.addItem('Zoom In', static_path+'zoom_in32.png', function(evt){
-            gInstance.graph.zoomIn();
-        });
+    //     var tb = new mxToolbar(menuElement);
+    //     tb.addItem('Zoom In', static_path + 'zoom_in32.png', function (evt) {
+    //         this.graph.zoomIn();
+    //     }.bind(this));
 
-        tb.addItem('Zoom Out', static_path+'zoom_out32.png', function(evt){
-            gInstance.graph.zoomOut();
-        });
+    //     tb.addItem('Zoom Out', static_path + 'zoom_out32.png', function (evt) {
+    //         this.graph.zoomOut();
+    //     }.bind(this));
 
-        tb.addItem('Actual Size', static_path+'view_1_132.png', function(evt){
-            gInstance.graph.zoomActual();
-        });
-        
-        tb.addItem('Toggle Outline', static_path+'map.png', function(evt){
-            gInstance.graph.toggleOutline();
-        });
+    //     tb.addItem('Actual Size', static_path + 'view_1_132.png', function (evt) {
+    //         this.graph.zoomActual();
+    //     }.bind(this));
 
-        tb.addItem('Save as draw.io Diagram', static_path+'save.png', function(evt){
-            gInstance.graph.exportGraph();
-        });
+    //     tb.addItem('Toggle Outline', static_path + 'map.png', function (evt) {
+    //         this.toggleOutline();
+    //     }.bind(this));
 
-        tb.addItem('Print', static_path+'print32.png', function(evt){
-            var preview = new mxPrintPreview(gInstance.graph, 1);
-            preview.open();
-        });
+    //     tb.addItem('Save as draw.io Diagram', static_path + 'save.png', function (evt) {
+    //         this.exportGraph();
+    //     }.bind(this));
 
-        tb.addItem('Poster Print', static_path+'press32.png', function(evt){
-            var pageCount = mxUtils.prompt('Enter Max Page Count', '1');
-            if (pageCount != null){
-                var scale = mxUtils.getScaleForPageCount(pageCount, gInstance.graph);
-                var preview = new mxPrintPreview(gInstance.graph, scale);
-                preview.open();
-            }
-        });
-    };
+    //     tb.addItem('Print', static_path + 'print32.png', function (evt) {
+    //         var preview = new mxPrintPreview(this.graph, 1);
+    //         preview.open();
+    //     }.bind(this));
 
-    toggleOutline(){
-        if(this.outlineElement.style.display == 'none')
-            this.outlineElement.style.display = 'block';
-        else
-            this.outlineElement.style.display = 'none';
-    };
+    //     tb.addItem('Poster Print', static_path + 'press32.png', function (evt) {
+    //         var pageCount = mxUtils.prompt('Enter Max Page Count', '1');
+    //         if (pageCount != null) {
+    //             var scale = mxUtils.getScaleForPageCount(pageCount, this.graph);
+    //             var preview = new mxPrintPreview(this.graph, scale);
+    //             preview.open();
+    //         }
+    //     }.bind(this));
+    // };
 
-    exportGraph(){
+    // toggleOutline() {
+    //     if (this.outlineElement.style.display == 'none')
+    //         this.outlineElement.style.display = 'block';
+    //     else
+    //         this.outlineElement.style.display = 'none';
+    // };
+
+    exportGraph() {
         var encoder = new mxCodec();
         var node = encoder.encode(this.graph.getModel());
         var xml_data = mxUtils.getPrettyXml(node);
 
         var a = window.document.createElement('a');
-        a.href = window.URL.createObjectURL(new Blob([xml_data], {type: 'type/xml'}));
-        a.download = this.GraphName+' Ontology.xml';
+        a.href = window.URL.createObjectURL(new Blob([xml_data], { type: 'type/xml' }));
+        a.download = this.GraphName + ' Ontology.xml';
 
         // Append anchor to body
         document.body.appendChild(a);
@@ -192,26 +193,27 @@ class OntologyDiagram {
 }
 
 //define new function callable from the outside
-function ComposeDiagram(ontology_title, ontology_classes, ontology_properties, data_properties, subclass_properties, graph_container, outlineContainer){
+function ComposeDiagram(ontology_title, ontology_classes, ontology_properties, data_properties, subclass_properties, graph_container, outlineContainer) {
     var g = new OntologyDiagram(ontology_title, graph_container, outlineContainer);
     g.beginUpdate();
-    try{
+    try {
         // Add classes to the diagram
-        for (var ontology_class of ontology_classes){
+        for (var ontology_class of ontology_classes) {
             g.addOntologyClass(ontology_class['name'], ontology_class['uri'], '', '', ontology_class['external']);
         }
 
         // Add main relationships to the diagram
-        for (var ontology_property of ontology_properties){
+        for (var ontology_property of ontology_properties) {
             g.Connect(ontology_property['domain_name'], ontology_property['range_name'], ontology_property['name'], 'edge_style');
         }
 
         // Add subclass relationships
-        for (var subclass_property of subclass_properties){
+        for (var subclass_property of subclass_properties) {
             g.Connect(subclass_property['child'], subclass_property['parent'], 'subclass of', 'subclass_edge_style');
         }
 
-        for (var data_property of data_properties){
+        // Add data properties
+        for (var data_property of data_properties) {
             g.addDataProperty(data_property['domain_name'], data_property['name']);
         }
     } finally {

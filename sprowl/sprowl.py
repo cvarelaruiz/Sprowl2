@@ -181,24 +181,22 @@ def get_properties(classes: list) -> list:
     return properties
 
 
-def render_template(ontology: dict, ontology_image: str, use_enhanced_template: bool) -> None:
+def render_template(ontology: dict, ontology_image: str) -> None:
     env = Environment(loader=PackageLoader('sprowl', 'templates'))
-    if use_enhanced_template:
-        template = env.get_template('enhanced.html')
-    else:
-        template = env.get_template('basic.html')
+    template = env.get_template('enhanced.html')  # Use enhanced template by default
     cl = [
             {"name" : c["name"],
                 "namespace": c["namespace"],
                 "uri": c["uri"],
-                "description": None,
+                "description": c["description"],
                 "superclass": c["superclass"],
-                "external": c["external"]
+                "external": c["external"],
+                "instances": c["instances"]
             } for c in ontology["classes"]]
     classes_json = json.dumps(cl)
 
     properties_json = json.dumps([p for p in ontology["properties"] if p["type_name"] == "ObjectProperty"])
-    data_properties_json = json.dumps([{"name": p["name"], "domain_name": p["domain_name"]} for p in ontology["properties"] if p["type_name"] == "DataTypeProperty"])
+    data_properties_json = json.dumps([{"name": p["name"], "domain_name": p["domain_name"]} for p in ontology["properties"] if p["type_name"] == "DatatypeProperty"])
 
     subcl = [{
         "child": s["name"],
@@ -267,7 +265,7 @@ def debug_checK_thing(g: Graph, thing: str) -> None:
     print(f"--------->  End of Thing: {thing}")
 
 
-def main(ontology_input_file, ontology_input_image, use_enhanced_template):
+def main(ontology_input_file, ontology_input_image):
     g = load_ontology(ontology_input_file)
     ontology = get_ontology_properties(g)
     ontology["download_location"] = prepare_file (
@@ -282,7 +280,7 @@ def main(ontology_input_file, ontology_input_image, use_enhanced_template):
         print(f"Parsing Ontology --> {title}")
 
     ontology_image = prepare_file(ontology_input_image, IMAGE_DIR, ontology["name"])
-    render_template(ontology, ontology_image, use_enhanced_template)
+    render_template(ontology, ontology_image)
 
 
 @route('/')
@@ -290,6 +288,10 @@ def index():
     filename = 'data-engineering.html'
     return static_file(filename, root='./ontologies')
 
+@route('/favicon.ico')
+@route('/static/favicon.svg')
+def serve_favicon():
+    return static_file('favicon.svg', root='./ontologies/static')
 
 @route('/theme/<cssFile>')
 def serve_css_files(cssFile):
@@ -319,8 +321,8 @@ def serve_res_files(resFile):
     return static_file(resFile, file_path)
 
 
-def to_file(file, img, enhanced):
-    main(file, img, enhanced)
+def to_file(file, img):
+    main(file, img)
 
 
 if __name__ == "__main__":
@@ -328,7 +330,6 @@ if __name__ == "__main__":
     parser.add_argument('-d', '--debug', help="Displays debug messsages", action="store_true")
     parser.add_argument('-f', '--file', help="The ontology file to document", action="store")
     parser.add_argument('-i', '--image', help="The ontology image file to add to the documentation", action="store")
-    parser.add_argument('-e', '--enhanced', help="Render the experimental enhanced template", action="store_true")
     parser.add_argument('-w', '--web', help="runs a web server to display the output instead of saving it to a file.", action="store_true")
 
     try:
@@ -345,18 +346,9 @@ if __name__ == "__main__":
         print("SprOWL3 - Ontology Auto-Documenter - CVR Data Consulting Services.")
         print("- Debug Mode ON\n")
 
-        # if args.img:
-        #     img = args.img
-        # else:
-        #     img = None
         img = None
 
-        if args.enhanced:
-            ENHANCED = True
-        else:
-            ENHANCED = False
-
-        to_file(args.file, img, ENHANCED)
+        to_file(args.file, img)
         if args.web:
             run(host='localhost', port=8181)
 

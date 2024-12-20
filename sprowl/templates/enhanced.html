@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{{ ontology.title }}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="theme/basic.css">
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="/js/mxGraph/mxClient.js"></script>
+    <script type="text/javascript" src="/js/ontodiagram.js"></script>
+    <script type="text/javascript">
+        function main(graph_container){
+            var ontology_classes = JSON.parse('{{ classes_json | safe }}');
+            var ontology_properties = JSON.parse('{{ properties_json | safe}}');
+            var data_properties = JSON.parse('{{ data_properties_json | safe}}');
+            var subclass_properties = JSON.parse('{{ subclass_properties_json | safe}}');
+
+            g = ComposeDiagram('{{ ontology.title }}', ontology_classes, ontology_properties, data_properties, subclass_properties, graph_container, 'outlineContainer');
+            document.getElementById('exportButton').onclick = function() {
+                g.exportGraph();
+            };
+        };
+    </script>
+    <style>
+        body {
+            color: black;
+        }
+        .card {
+            background-color: #f8f9fa; /* Light grey background */
+            color: black; /* Black text */
+        }
+        .table th, .table td {
+            background-color: #f8f9fa; /* Light grey background */
+            color: black; /* Black text */
+        }
+        #graphContainer {
+            width: 100% !important; /* Make the diagram container as wide as possible */
+            height: 600px;
+        }
+        #outlineContainer {
+            position: fixed; /* Fix the position of the outline container */
+            top: 10px;
+            right: 10px;
+            z-index: 1000;
+            background-color: white;
+        }
+        .card-class {
+            background-color: #fff3cd; /* Light yellow background */
+            color: black; /* Black text */
+        }
+        .card-class .card-header {
+            background-color: #ffeeba; /* Darker yellow background */
+            color: black; /* Black text */
+        }
+        .card-instance {
+            background-color: #f8d7da; /* Light red background */
+            color: black; /* Black text */
+        }
+        .card-instance .card-header {
+            background-color: #f5c6cb; /* Darker red background */
+            color: black; /* Black text */
+        }
+        .card-data-property {
+            background-color: #d4edda; /* Light green background */
+            color: black; /* Black text */
+        }
+        .card-data-property .card-header {
+            background-color: #c3e6cb; /* Darker green background */
+            color: black; /* Black text */
+        }
+        .card-relationship {
+            background-color: #d1ecf1; /* Light blue background */
+            color: black; /* Black text */
+        }
+        .card-relationship .card-header {
+            background-color: #bee5eb; /* Darker blue background */
+            color: black; /* Black text */
+        }
+    </style>
+</head>
+
+<body onload="main(document.getElementById('graphContainer'));">
+    <div class="container">
+        <!-- --------------- TITLE -------------------->
+        <div class="text-center my-4">
+            <h1>{{ ontology.title }}</h1>
+            <p>{{ ontology.description }}</p>
+        </div>
+
+        <!-- --------------- ONTOLOGY DESCRIPTION -------------------->
+        <div class="card mb-4">
+            <div class="card-header">
+                Ontology Details
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered">
+                    <tr>
+                        <th>URI</th>
+                        <td><a href="{{ ontology.uri }}">{{ ontology.uri }}</a></td>
+                    </tr>
+                    {% if ontology.publisher != "None" %}
+                    <tr>
+                        <th>Published By</th>
+                        <td>{{ ontology.publisher }}</td>
+                    </tr>
+                    {% endif %}
+                    {% if ontology.creators|count > 0 %}
+                    <tr>
+                        <th>Creators</th>
+                        <td>
+                            {% for creator in ontology.creators %}
+                            <a href="mailto:{{creator}}?subject={{ontology.title}} - ver: {{ontology.versionInfo}}">{{ creator }}</a>{% if not loop.last %}, {% endif %}
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    {% endif %}
+                    <tr>
+                        <th>Version / Status</th>
+                        <td>{{ontology.versionInfo}} / {{ontology.term_status}}</td>
+                    </tr>
+                    <tr>
+                        <th>Download</th>
+                        <td><a href="{{ontology.download_location}}" download>XML/RDF</a></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- --------------- TOC -------------------->
+        <h2 id="toc">Table of Contents</h2>
+        <nav>
+            <ol class="list-group list-group-numbered">
+                <li class="list-group-item"><a href="#diagram"><b>Ontology Diagram</b></a></li>
+                <li class="list-group-item"><a href="#classes"><b>Classes & Instances</b></a>
+                    <ol class="list-group">
+                        {% for class in classes %}
+                        <li class="list-group-item"><a href="#class_{{ class.name }}" class="class">{{ class.name }}</a>
+                            <ol class="list-group">
+                                {% for instance in class.instances %}
+                                <li class="list-group-item"><a href="#instance_{{instance.name}}" class="instance">{{ instance.name}}</a></li>
+                                {% endfor %}
+                            </ol>
+                        </li>
+                        {% endfor %}
+                    </ol>
+                </li>
+                <li class="list-group-item"><a href="#DataProperties"><b>Data Properties</b></a>
+                    <ol class="list-group">
+                        {% for property in properties|selectattr("type_name", "equalto", "DatatypeProperty")|list %}
+                        <li class="list-group-item"><a href="#prop_{{ property.name }}" class="data_property">{{ property.name }}</a></li>
+                        {% endfor %}
+                    </ol>
+                </li>
+                <li class="list-group-item"><a href="#Relationships"><b>Relationships</b></a>
+                    <ol class="list-group">
+                        {% for property in properties|selectattr("type_name", "equalto", "ObjectProperty")|list %}
+                        <li class="list-group-item"><a href="#prop_{{ property.name }}" class="object_property">{{ property.name }}</a></li>
+                        {% endfor %}
+                    </ol>
+                </li>
+            </ol>
+        </nav>
+
+        <!-- --------------- DIAGRAM -------------------->
+        <h2 id="diagram">Ontology Diagram</h2>
+        <div class="container mb-4">
+            <style>
+                #MenuContainer img{
+                    max-height: 40px;
+                    max-width: 40px;
+                }
+            </style>
+            <div id="MenuContainer" class="d-flex bg-white" style="z-index: -3; overflow: hidden; top: 0px; right: 0px; width: 600px; height: 45px;"></div>
+            <div id="outlineContainer" class="position-absolute bg-white border" style="overflow: hidden; width: 160px; height: 120px;"></div>
+            <button id="exportButton" class="btn btn-primary mb-2">Save as draw.io XML</button>
+            <div id="graphContainer" class="border mx-auto" style="overflow: auto;"></div>
+        </div>
+        <a href="#toc">Return to Table of Content</a>
+
+        <!-- --------------- DOCUMENTATION -------------------->
+        <h2>Ontology Terms</h2>
+        <p>Automatically generated documentation for the ontology terms.</p>
+
+        <!-- --------------- CLASSES -------------------->
+        <h3 id="classes">Classes & Instances</h3>
+        {% for class in classes %}
+        <div class="card mb-4 card-class" id="class_{{ class.name }}">
+            <div class="card-header card-class-header">
+                {% if class.external %}
+                <a href="{{ class.uri}}" target="_blank">{{class.name}}</a> (External)
+                {% else %}
+                {{ class.name }}
+                {% endif %}
+            </div>
+            <div class="card-body card-class-body">
+                {% if class.description != "None" %}
+                <p><strong>Description:</strong> {{ class.description }}</p>
+                {% endif %}
+                <p><strong>URI:</strong> {{ class.uri }}</p>
+                {% if class.superclass != "None" %}
+                <p><strong>SuperClass:</strong> <a href="#class_{{class.superclass}}">{{ class.superclass}}</a></p>
+                {% endif %}
+                {% if class.properties|selectattr("type_name", "equalto", "DatatypeProperty")|list|count >0 %}
+                <p><strong>Data Properties:</strong>
+                    {% for property in class.properties|selectattr("type_name", "equalto", "DatatypeProperty") %}
+                    <a href="#prop_{{ property.name }}">{{ property.name }}</a>{% if not loop.last %}, {% endif %}
+                    {% endfor %}
+                </p>
+                {% endif %}
+                {% if class.properties|selectattr("type_name", "equalto", "ObjectProperty")|list|count >0 %}
+                <p><strong>Outgoing Relationships:</strong>
+                    {% for property in class.properties|selectattr("type_name", "equalto", "ObjectProperty") %}
+                    <a href="#prop_{{ property.name }}">{{ property.name }}</a>{% if not loop.last %}, {% endif %}
+                    {% endfor %}
+                </p>
+                {% endif %}
+                {% if class.ranges_of|selectattr("type_name", "equalto", "ObjectProperty")|list|count >0 %}
+                <p><strong>Incoming Relationships:</strong>
+                    {% for range in class.ranges_of|selectattr("type_name", "equalto", "ObjectProperty") %}
+                    <a href="#prop_{{ range.name }}">{{ range.name }}</a>{% if not loop.last %}, {% endif %}
+                    {% endfor %}
+                </p>
+                {% endif %}
+            </div>
+        </div>
+        <a href="#toc">Return to Table of Content</a><br>
+
+        <!-- --------------- INSTANCES -------------------->
+        {% if class.instances|count >0 %}
+        <div class="ml-4">
+            <h4>{{ class.name }} Instances</h4>
+            {% for instance in class.instances %}
+            <div class="card mb-4 card-instance" id="instance_{{instance.name}}">
+                <div class="card-header card-instance-header">
+                    {{ instance.name}}
+                </div>
+                <div class="card-body card-instance-body">
+                    {% if instance.description != "None" %}
+                    <p><strong>Description:</strong> {{ instance.description}}</p>
+                    {% endif %}
+                    <p><strong>URI:</strong> {{ instance.uri }}</p>
+                    {% for property in instance.data_properties %}
+                    <p><strong>{{ property.name }}:</strong> {{ property.value }}</p>
+                    {% endfor %}
+                </div>
+            </div>
+            <br>
+            {% endfor %}
+            <a href="#toc">Return to Table of Content</a><br>
+        </div>
+        {% endif %}
+        <br>
+        {% endfor %}
+
+        <!-- --------------- DATA PROPERTIES -------------------->
+        <h3 id="DataProperties">Data Properties (or Attributes)</h3>
+        {% for property in properties|selectattr("type_name", "equalto", "DatatypeProperty")|list %}
+        <div class="card mb-4 card-data-property" id="prop_{{ property.name }}">
+            <div class="card-header card-data-property-header">
+                {{property.name}}
+            </div>
+            <div class="card-body card-data-property-body">
+                {% if property.description != "None" %}
+                <p><strong>Description:</strong> {{ property.description}}</p>
+                {% endif %}
+                <p><strong>URI:</strong> {{ property.uri}}</p>
+                {% if property.type_name != "None" %}
+                <p><strong>Type:</strong>
+                    {% if property.type_name=="DatatypeProperty" %}
+                    <a href="{{property.type_uri}}" target="_blank">Data Attribute ({{property.type_name}})</a>
+                    {% else %}
+                    <a href="{{property.type_uri}}" target="_blank">Relationships ({{property.type_name}})</a>
+                    {% endif %}
+                </p>
+                {% endif %}
+                {% if property.domain != "None" %}
+                <p><strong>Domain:</strong> <a href="#class_{{property.domain_name}}">{{property.domain_name}}</a></p>
+                {% endif %}
+                {% if property.range != "None" %}
+                <p><strong>Range:</strong>
+                    {% if property.type_name=="DatatypeProperty" %}
+                    <a href="#prop_{{property.range_name}}" target="_blank">{{property.range_name}}</a>
+                    {% else %}
+                    <a href="#class_{{property.range_name}}" target="_blank">{{property.range_name}}</a>
+                    {% endif %}
+                </p>
+                {% endif %}
+            </div>
+        </div>
+        <a href="#toc">Return to Table of Content</a><br><br>
+        {% endfor %}
+
+        <!-- --------------- RELATIONSHIPS -------------------->
+        <h3 id="Relationships">Relationships</h3>
+        {% for property in properties|selectattr("type_name", "equalto", "ObjectProperty")|list + ranges_of|list %}
+        <div class="card mb-4 card-relationship" id="prop_{{ property.name }}">
+            <div class="card-header card-relationship-header">
+                {{property.name}}
+            </div>
+            <div class="card-body card-relationship-body">
+                {% if property.description != "None" %}
+                <p><strong>Description:</strong> {{ property.description}}</p>
+                {% endif %}
+                <p><strong>URI:</strong> {{ property.uri}}</p>
+                {% if property.type_name != "None" %}
+                <p><strong>Type:</strong>
+                    {% if property.type_name=="DatatypeProperty" %}
+                    <a href="{{property.type_uri}}" target="_blank">Data Attribute ({{property.type_name}})</a>
+                    {% else %}
+                    <a href="{{property.type_uri}}" target="_blank">Relationships ({{property.type_name}})</a>
+                    {% endif %}
+                </p>
+                {% endif %}
+                {% if property.domain != "None" %}
+                <p><strong>Domain:</strong> <a href="#class_{{property.domain_name}}">{{property.domain_name}}</a></p>
+                {% endif %}
+                {% if property.range != "None" %}
+                <p><strong>Range:</strong>
+                    {% if property.type_name=="DatatypeProperty" %}
+                    <a href="#prop_{{property.range_name}}" target="_blank">{{property.range_name}}</a>
+                    {% else %}
+                    <a href="#class_{{property.range_name}}" target="_blank">{{property.range_name}}</a>
+                    {% endif %}
+                </p>
+                {% endif %}
+            </div>
+        </div>
+        <a href="#toc">Return to Table of Content</a><br><br>
+        {% endfor %}
+    </div>
+</body>
+</html>
